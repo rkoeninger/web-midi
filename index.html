@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>MIDI Demo</title>
+    <script src="Base64.js"></script>
+    <script src="Base64Binary.js"></script>
+    <script src="MIDI.js"></script>
+    <script>
+        function press(midi, note, offset, delay, duration, tempo, velocity) {
+            midi.noteOn(0, note, velocity, delay + tempo * offset);
+            midi.noteOff(0, note, delay + duration + tempo * offset);
+        }
+        window.onload = function () {
+            MIDI.loadPlugin({
+                soundfontUrl: "./soundfont/",
+                instrument: "acoustic_grand_piano",
+                onprogress: function(state, progress) {
+                    console.log(state, progress);
+                },
+                onsuccess: function() {
+                    var delay = 1;
+                    var duration = 2;
+                    var tempo = 0.5;
+                    var note = 50;
+                    var velocity = 80;
+                    MIDI.setVolume(0, 127);
+                    for (var i = 0; i < 12; i += 4) {
+                        press(MIDI, 50, i + 0, delay, duration, tempo, velocity);
+                        press(MIDI, 54, i + 0, delay, duration, tempo, velocity);
+                        press(MIDI, 57, i + 0, delay, duration, tempo, velocity);
+                        press(MIDI, 49, i + 2, delay, duration, tempo, velocity);
+                        press(MIDI, 52, i + 2, delay, duration, tempo, velocity);
+                        press(MIDI, 57, i + 2, delay, duration, tempo, velocity);
+                    }
+                    press(MIDI, 50, 12, delay, duration, tempo, velocity);
+                    press(MIDI, 54, 12, delay, duration, tempo, velocity);
+                    press(MIDI, 57, 12, delay, duration, tempo, velocity);
+                }
+            });
+        };
+    </script>
+  </head>
+</html>
